@@ -15,18 +15,12 @@ namespace LibraryManagement.Controllers
             _bookrepo = bookrepo;
         }
 
-        //Search Action
-        public async Task<IActionResult> Read(string searchString)
+     
+        [HttpGet]
+        public async Task<IActionResult> Read()
         {
 
             var books = await _bookrepo.GetAllBooksAsync();
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                books = books.Where(b => b.BookName.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                b.Author.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                b.Category.Contains(searchString, StringComparison.OrdinalIgnoreCase));
-            }
             return View(books);
         }
 
@@ -50,7 +44,7 @@ namespace LibraryManagement.Controllers
 
             await _bookrepo.AddBookAsync(book);
             TempData["SuccessMessage"] = $"Successfully added '{book.BookName}'!";
-            return RedirectToAction(nameof(Read));
+            return RedirectToAction("Read");
         }
 
         // Edit Action
